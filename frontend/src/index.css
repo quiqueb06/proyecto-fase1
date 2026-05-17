@@ -1,0 +1,269 @@
+/* =========================================
+   VARIABLES CSS — TEMA ENTRENAMIENTO FÍSICO
+   ========================================= */
+:root {
+  --color-fondo:       #0f0f0f;
+  --color-superficie:  #1a1a1a;
+  --color-superficie2: #242424;
+  --color-texto:       #f0f0f0;
+  --color-texto-suave: #a0a0a0;
+  --color-acento:      #e63946;
+  --color-acento2:     #ff6b6b;
+  --color-borde:       #333333;
+  --color-exito:       #2ecc71;
+  --radio:             8px;
+  --sombra:            0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--color-fondo);
+  color: var(--color-texto);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* ---- LAYOUT ---- */
+.app-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+/* ---- HEADER ---- */
+.app-header {
+  text-align: center;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 2px solid var(--color-acento);
+}
+
+.app-header h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--color-acento);
+}
+
+.app-header p {
+  color: var(--color-texto-suave);
+  margin-top: 4px;
+  font-size: 0.95rem;
+}
+
+/* ---- FORMULARIO ---- */
+.formulario-card {
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  padding: 24px;
+  margin-bottom: 28px;
+  box-shadow: var(--sombra);
+}
+
+.formulario-card h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 18px;
+  color: var(--color-acento);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.form-grid .full-width {
+  grid-column: 1 / -1;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-group label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-texto-suave);
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  background: var(--color-superficie2);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  color: var(--color-texto);
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+  outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--color-acento);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 72px;
+}
+
+.form-group select option {
+  background: var(--color-superficie2);
+}
+
+.btn-submit {
+  grid-column: 1 / -1;
+  background: var(--color-acento);
+  color: white;
+  border: none;
+  border-radius: var(--radio);
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn-submit:hover  { background: var(--color-acento2); }
+.btn-submit:active { transform: scale(0.98); }
+
+/* ---- LISTA ---- */
+.lista-vacia {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--color-texto-suave);
+  background: var(--color-superficie);
+  border: 1px dashed var(--color-borde);
+  border-radius: var(--radio);
+}
+
+.lista-vacia p { font-size: 1.5rem; margin-bottom: 8px; }
+
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+/* ---- ITEM CARD ---- */
+.item-card {
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  padding: 18px;
+  box-shadow: var(--sombra);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.item-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.item-card-nombre {
+  font-size: 1rem;
+  font-weight: 700;
+  flex: 1;
+}
+
+.badge-categoria {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 20px;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+.badge-estado {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.estado-activo     { background: rgba(46,204,113,0.15); color: #2ecc71; }
+.estado-completado { background: rgba(52,152,219,0.15); color: #3498db; }
+.estado-pausa      { background: rgba(243,156,18,0.15);  color: #f39c12; }
+
+.item-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--color-texto-suave);
+}
+
+.item-card-notas {
+  font-size: 0.85rem;
+  color: var(--color-texto-suave);
+  font-style: italic;
+  border-top: 1px solid var(--color-borde);
+  padding-top: 8px;
+}
+
+.item-card-atributos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.atributo-chip {
+  background: var(--color-superficie2);
+  border: 1px solid var(--color-borde);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  color: var(--color-texto-suave);
+}
+
+.item-card-acciones {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--color-borde);
+  padding-top: 10px;
+  margin-top: auto;
+}
+
+.btn-accion {
+  flex: 1;
+  background: var(--color-superficie2);
+  border: 1px solid var(--color-borde);
+  border-radius: 6px;
+  color: var(--color-texto-suave);
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  text-align: center;
+}
+
+.btn-accion:hover        { background: var(--color-acento);  border-color: var(--color-acento);  color: white; }
+.btn-accion.danger:hover { background: #c0392b;               border-color: #c0392b;               color: white; }
+.btn-accion.success:hover{ background: var(--color-exito);   border-color: var(--color-exito);   color: white; }
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 600px) {
+  .form-grid  { grid-template-columns: 1fr; }
+  .items-grid { grid-template-columns: 1fr; }
+}
