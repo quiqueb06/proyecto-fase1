@@ -1,0 +1,120 @@
+// src/components/ModalEditar.jsx
+import { useState, useEffect } from 'react'
+import { CATEGORIAS, ESTADOS } from '../utils/categorias'
+
+export default function ModalEditar({ item, onGuardar, onCerrar }) {
+  const [form, setForm] = useState({
+    nombre:          item.nombre,
+    categoriaId:     item.categoriaId,
+    estado:          item.estado,
+    puntuacion:      item.puntuacion ?? '',
+    notas:           item.notas || '',
+    duracionMinutos: item.atributos?.duracionMinutos ?? '',
+    ejercicios:      item.atributos?.ejercicios || '',
+    volumenTotal:    item.atributos?.volumenTotal ?? '',
+  })
+
+  // Cerrar con Escape
+  useEffect(() => {
+    function handler(e) { if (e.key === 'Escape') onCerrar() }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [onCerrar])
+
+  function handleChange(e) {
+    const { name, value } = e.target
+    setForm(prev => ({ ...prev, [name]: value }))
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault()
+    onGuardar({
+      ...item,
+      nombre:         form.nombre.trim(),
+      categoriaId:    form.categoriaId,
+      estado:         form.estado,
+      puntuacion:     form.puntuacion !== '' ? parseFloat(form.puntuacion) : null,
+      notas:          form.notas.trim(),
+      fechaActividad: new Date().toISOString(),
+      atributos: {
+        duracionMinutos: form.duracionMinutos ? parseInt(form.duracionMinutos) : null,
+        ejercicios:      form.ejercicios.trim(),
+        volumenTotal:    form.volumenTotal ? parseFloat(form.volumenTotal) : null,
+      },
+    })
+  }
+
+  return (
+    <div className="modal-overlay" onClick={e => e.target === e.currentTarget && onCerrar()}>
+      <div className="modal-box">
+        <h2>Editar sesión</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="form-grid">
+
+            <div className="form-group full-width">
+              <label>Nombre</label>
+              <input name="nombre" value={form.nombre} onChange={handleChange} required />
+            </div>
+
+            <div className="form-group">
+              <label>Categoría</label>
+              <select name="categoriaId" value={form.categoriaId} onChange={handleChange}>
+                {CATEGORIAS.map(c => (
+                  <option key={c.id} value={c.id}>{c.nombre}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label>Estado</label>
+              <select name="estado" value={form.estado} onChange={handleChange}>
+                {ESTADOS.map(e => (
+                  <option key={e.id} value={e.id}>{e.nombre}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label>Duración (min)</label>
+              <input name="duracionMinutos" type="number" min="1" max="300"
+                     value={form.duracionMinutos} onChange={handleChange} />
+            </div>
+
+            <div className="form-group">
+              <label>Intensidad (0–10)</label>
+              <input name="puntuacion" type="number" min="0" max="10" step="0.5"
+                     value={form.puntuacion} onChange={handleChange} />
+            </div>
+
+            <div className="form-group full-width">
+              <label>Ejercicios</label>
+              <input name="ejercicios" type="text" placeholder="Press banca, Sentadilla..."
+                     value={form.ejercicios} onChange={handleChange} />
+            </div>
+
+            <div className="form-group">
+              <label>Volumen total (kg)</label>
+              <input name="volumenTotal" type="number" min="0" step="0.5"
+                     value={form.volumenTotal} onChange={handleChange} />
+            </div>
+
+            <div className="form-group">
+              <label>Notas</label>
+              <textarea name="notas" value={form.notas} onChange={handleChange} />
+            </div>
+
+          </div>
+
+          <div className="modal-acciones">
+            <button type="button" className="btn-cancelar" onClick={onCerrar}>
+              Cancelar
+            </button>
+            <button type="submit" className="btn-submit" style={{ flex: 2 }}>
+              Guardar cambios
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}
