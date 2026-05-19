@@ -110,12 +110,13 @@ proyecto-fase1/
 
 ## Mis primeros Items
 
-> **Reemplaza esta sección con una captura de pantalla real tuya mostrando 3+ sesiones de entrenamiento propias (no placeholders).**
+![Captura de la app con sesiones reales](captura.png)
 
-Ejemplo de sesiones reales que deberías registrar:
-- Tu sesión de pecho del lunes
-- Tu rutina de cardio favorita
-- Un día de piernas específico
+| Sesión | Tipo | Duración | Intensidad | Ejercicios |
+|---|---|---|---|---|
+| Espalda y bíceps | Fuerza | 90 min | 8.5/10 | Preacher curls, Spider curls, Back extensions, Pull-ups, Lat pulldown, Facepull, Seated cable row |
+| Caminar | Cardio | 120 min | 6/10 | Caminar 10 kilómetros |
+| Día pecho y hombro | Fuerza | 90 min | 8/10 | Press banca inclinado, Press banca declinado, Chest fly machine, Press de hombro, Lateral raise |
 
 ---
 
