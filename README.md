@@ -19,7 +19,7 @@ Registro sesiones de gym con tipo de entrenamiento, duración, ejercicios realiz
 | Frontend  | React 18 + Vite                     |
 | Estado    | useState + useEffect + LocalStorage |
 | Backend   | Node.js + Express 4                 |
-| Base de datos | SQLite (better-sqlite3)         |
+| Base de datos | SQLite (`node:sqlite` nativo, Node.js 22+) |
 | CORS      | Configurado con variable FRONTEND_URL |
 
 ---
@@ -68,7 +68,7 @@ proyecto-fase1/
 ├── backend/
 │   ├── src/
 │   │   ├── db/
-│   │   │   └── database.js          ← inicialización SQLite
+│   │   │   └── database.js          ← SQLite con node:sqlite
 │   │   ├── routes/
 │   │   │   └── items.js             ← 5 endpoints REST
 │   │   └── index.js                 ← servidor Express + CORS
