@@ -1,20 +1,18 @@
-// src/components/FormularioItem.jsx
 import { useState } from 'react'
 import { CATEGORIAS, ESTADOS } from '../utils/categorias'
 
 const FORM_INICIAL = {
-  nombre:       '',
-  categoriaId:  'fuerza',
-  estado:       'activo',
-  puntuacion:   '',
-  notas:        '',
-  // atributos específicos del entrenamiento
+  nombre:          '',
+  categoriaId:     'fuerza',
+  estado:          'activo',
+  puntuacion:      '',
+  notas:           '',
   duracionMinutos: '',
   ejercicios:      '',
   volumenTotal:    '',
 }
 
-export default function FormularioItem({ onAgregar }) {
+export default function FormularioItem({ onAgregar, inputRef }) {
   const [form, setForm] = useState(FORM_INICIAL)
   const [error, setError] = useState('')
 
@@ -26,12 +24,10 @@ export default function FormularioItem({ onAgregar }) {
 
   function handleSubmit(e) {
     e.preventDefault()
-
     if (!form.nombre.trim() || form.nombre.trim().length < 3) {
       setError('El nombre debe tener al menos 3 caracteres.')
       return
     }
-
     const nuevo = {
       id:             crypto.randomUUID(),
       nombre:         form.nombre.trim(),
@@ -48,39 +44,34 @@ export default function FormularioItem({ onAgregar }) {
       },
       activo: true,
     }
-
     onAgregar(nuevo)
     setForm(FORM_INICIAL)
   }
 
   return (
     <div className="formulario-card">
-      <h2>Registrar sesión</h2>
+      <h2>Registrar sesion</h2>
 
-      {error && (
-        <p style={{ color: 'var(--color-acento)', marginBottom: 12, fontSize: '0.9rem' }}>
-          {error}
-        </p>
-      )}
+      {error && <p className="error-msg">{error}</p>}
 
       <form onSubmit={handleSubmit}>
         <div className="form-grid">
 
-          {/* Nombre */}
           <div className="form-group full-width">
-            <label htmlFor="nombre">Nombre de la sesión *</label>
+            <label htmlFor="nombre">Nombre de la sesion *</label>
+            {/* inputRef apunta a este input - useRef uso 1 */}
             <input
               id="nombre"
               name="nombre"
               type="text"
-              placeholder="Ej: Día de pecho y tríceps"
+              placeholder="Ej: Dia de pecho y triceps"
               value={form.nombre}
               onChange={handleChange}
+              ref={inputRef}
               required
             />
           </div>
 
-          {/* Categoría */}
           <div className="form-group">
             <label htmlFor="categoriaId">Tipo de entrenamiento</label>
             <select id="categoriaId" name="categoriaId" value={form.categoriaId} onChange={handleChange}>
@@ -90,7 +81,6 @@ export default function FormularioItem({ onAgregar }) {
             </select>
           </div>
 
-          {/* Estado */}
           <div className="form-group">
             <label htmlFor="estado">Estado</label>
             <select id="estado" name="estado" value={form.estado} onChange={handleChange}>
@@ -100,9 +90,8 @@ export default function FormularioItem({ onAgregar }) {
             </select>
           </div>
 
-          {/* Duración */}
           <div className="form-group">
-            <label htmlFor="duracionMinutos">Duración (minutos)</label>
+            <label htmlFor="duracionMinutos">Duracion (minutos)</label>
             <input
               id="duracionMinutos"
               name="duracionMinutos"
@@ -115,9 +104,8 @@ export default function FormularioItem({ onAgregar }) {
             />
           </div>
 
-          {/* Puntuación */}
           <div className="form-group">
-            <label htmlFor="puntuacion">Intensidad (0–10)</label>
+            <label htmlFor="puntuacion">Intensidad (0-10)</label>
             <input
               id="puntuacion"
               name="puntuacion"
@@ -131,7 +119,6 @@ export default function FormularioItem({ onAgregar }) {
             />
           </div>
 
-          {/* Ejercicios */}
           <div className="form-group full-width">
             <label htmlFor="ejercicios">Ejercicios (separados por coma)</label>
             <input
@@ -144,7 +131,6 @@ export default function FormularioItem({ onAgregar }) {
             />
           </div>
 
-          {/* Volumen total */}
           <div className="form-group">
             <label htmlFor="volumenTotal">Volumen total (kg)</label>
             <input
@@ -159,20 +145,19 @@ export default function FormularioItem({ onAgregar }) {
             />
           </div>
 
-          {/* Notas */}
           <div className="form-group">
             <label htmlFor="notas">Notas</label>
             <textarea
               id="notas"
               name="notas"
-              placeholder="Observaciones, cómo te sentiste..."
+              placeholder="Observaciones..."
               value={form.notas}
               onChange={handleChange}
             />
           </div>
 
           <button type="submit" className="btn-submit">
-            Guardar sesión
+            Guardar sesion
           </button>
         </div>
       </form>
