@@ -1,7 +1,7 @@
 /* =========================================
-   VARIABLES CSS — TEMA ENTRENAMIENTO FÍSICO
+   TEMA OSCURO (default)
    ========================================= */
-:root {
+body[data-theme="oscuro"] {
   --color-fondo:       #0f0f0f;
   --color-superficie:  #1a1a1a;
   --color-superficie2: #242424;
@@ -11,8 +11,29 @@
   --color-acento2:     #ff6b6b;
   --color-borde:       #333333;
   --color-exito:       #2ecc71;
-  --radio:             8px;
-  --sombra:            0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* =========================================
+   TEMA CLARO
+   ========================================= */
+body[data-theme="claro"] {
+  --color-fondo:       #f5f5f5;
+  --color-superficie:  #ffffff;
+  --color-superficie2: #eeeeee;
+  --color-texto:       #1a1a1a;
+  --color-texto-suave: #555555;
+  --color-acento:      #c0392b;
+  --color-acento2:     #e63946;
+  --color-borde:       #cccccc;
+  --color-exito:       #27ae60;
+}
+
+/* =========================================
+   VARIABLES COMPARTIDAS
+   ========================================= */
+:root {
+  --radio:  8px;
+  --sombra: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 * {
@@ -27,6 +48,7 @@ body {
   font-family: 'Segoe UI', system-ui, sans-serif;
   min-height: 100vh;
   line-height: 1.6;
+  transition: background 0.2s, color 0.2s;
 }
 
 /* ---- LAYOUT ---- */
@@ -54,6 +76,37 @@ body {
   color: var(--color-texto-suave);
   margin-top: 4px;
   font-size: 0.95rem;
+}
+
+/* ---- BARRA DE CONTROLES (modo + tema) ---- */
+.controles-bar {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-control {
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  color: var(--color-texto);
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.btn-control:hover {
+  border-color: var(--color-acento);
+}
+
+.btn-control.activo {
+  border-color: var(--color-acento);
+  color: var(--color-acento);
+  font-weight: 700;
 }
 
 /* ---- FORMULARIO ---- */
@@ -261,6 +314,16 @@ body {
 .btn-accion:hover        { background: var(--color-acento);  border-color: var(--color-acento);  color: white; }
 .btn-accion.danger:hover { background: #c0392b;               border-color: #c0392b;               color: white; }
 .btn-accion.success:hover{ background: var(--color-exito);   border-color: var(--color-exito);   color: white; }
+
+/* ---- ERROR ---- */
+.error-msg {
+  color: var(--color-acento);
+  font-size: 0.9rem;
+  padding: 8px 12px;
+  border: 1px solid var(--color-acento);
+  border-radius: var(--radio);
+  margin-bottom: 12px;
+}
 
 /* ---- RESPONSIVE ---- */
 @media (max-width: 600px) {
