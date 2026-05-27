@@ -1,3 +1,4 @@
+// src/components/FormularioItem.jsx
 import { useState } from 'react'
 import { CATEGORIAS, ESTADOS } from '../utils/categorias'
 
@@ -29,7 +30,6 @@ export default function FormularioItem({ onAgregar, inputRef }) {
       return
     }
     const nuevo = {
-      id:             crypto.randomUUID(),
       nombre:         form.nombre.trim(),
       categoriaId:    form.categoriaId,
       estado:         form.estado,
@@ -59,7 +59,7 @@ export default function FormularioItem({ onAgregar, inputRef }) {
 
           <div className="form-group full-width">
             <label htmlFor="nombre">Nombre de la sesion *</label>
-            {/* inputRef apunta a este input - useRef uso 1 */}
+            {/* inputRef apunta a este input — useRef uso 1 */}
             <input
               id="nombre"
               name="nombre"
@@ -76,7 +76,7 @@ export default function FormularioItem({ onAgregar, inputRef }) {
             <label htmlFor="categoriaId">Tipo de entrenamiento</label>
             <select id="categoriaId" name="categoriaId" value={form.categoriaId} onChange={handleChange}>
               {CATEGORIAS.map(c => (
-                <option key={c.id} value={c.id}>{c.nombre}</option>
+                <option key={c.id} value={c.id}>{c.emoji} {c.nombre}</option>
               ))}
             </select>
           </div>

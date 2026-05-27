@@ -59,6 +59,9 @@ export function StorageProvider({ children }) {
       } else {
         const data  = localStorage.getItem('items')
         const lista = data ? JSON.parse(data) : []
+        if (!item.id) {
+          item.id = crypto.randomUUID()
+        }
         const idx   = lista.findIndex(i => i.id === item.id)
         if (idx >= 0) {
           lista[idx] = item

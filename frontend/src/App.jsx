@@ -1,3 +1,4 @@
+// src/App.jsx
 import { useState, useEffect, useRef } from 'react'
 import FormularioItem from './components/FormularioItem'
 import ListaItems     from './components/ListaItems'
@@ -12,27 +13,34 @@ export default function App() {
 
   const [items, setItems] = useState([])
 
+  // ── useRef 1: foco en el input nombre tras agregar un item ─────────────────
   const inputRef = useRef(null)
 
+  // ── useRef 2: guardar ID del setInterval sin provocar re-render ───────────
   const intervalRef = useRef(null)
 
+  // Carga inicial y cuando cambia el modo
   useEffect(() => {
     obtenerItems().then(data => setItems(data))
   }, [obtenerItems])
 
+  // Intervalo de sincronizacion (guarda referencia en intervalRef)
   useEffect(() => {
     intervalRef.current = setInterval(() => {
       obtenerItems().then(data => setItems(data))
-    }, 30000)
+    }, 30000) // refresca cada 30s
     return () => clearInterval(intervalRef.current)
   }, [obtenerItems])
 
+  // ── Atajos de teclado con cleanup ─────────────────────────────────────────
   useEffect(() => {
     const handler = (e) => {
-      if (e.ctrlKey && e.key === 'n') {
+      // Ctrl+B — enfocar input nombre
+      if (e.ctrlKey && e.key === 'b') {
         e.preventDefault()
         inputRef.current?.focus()
       }
+      // T — cambiar tema (solo si no estamos en un input)
       if (e.key === 't' || e.key === 'T') {
         const enInput = ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)
         if (!enInput) toggleTema()
@@ -42,10 +50,12 @@ export default function App() {
     return () => window.removeEventListener('keydown', handler)
   }, [toggleTema])
 
+  // ── Handlers CRUD ──────────────────────────────────────────────────────────
   async function handleAgregar(nuevoItem) {
     await guardarItem(nuevoItem)
     const data = await obtenerItems()
     setItems(data)
+    // useRef 1: foco al input despues de agregar
     inputRef.current?.focus()
   }
 
