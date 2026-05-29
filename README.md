@@ -1,8 +1,9 @@
-# Mi Entrenamiento - Bitácora de Sesiones
+# Mi Entrenamiento — Bitácora de Sesiones
 
-**Proyecto Final - Sistemas y Tecnologías Web - UVG 2026**
+**Proyecto Final · Sistemas y Tecnologías Web · UVG 2026**
 **Fase 1:** useState · useEffect · Backend Express
 **Fase 2:** useContext · useRef · Tema Visual
+**Fase 3:** useReducer · React.memo · Recharts
 
 ---
 
@@ -35,7 +36,7 @@ cd backend
 npm install
 cp .env.example .env
 npm run dev
-# -> http://localhost:3001
+# → http://localhost:3001
 ```
 
 ### Frontend
@@ -44,7 +45,7 @@ npm run dev
 cd frontend
 npm install
 npm run dev
-# -> http://localhost:5173
+# → http://localhost:5173
 ```
 
 ---
@@ -92,7 +93,7 @@ proyecto-fase1/
 
 ---
 
-## Modelo de datos - Item
+## Modelo de datos — Item
 
 | Campo          | Tipo        | Descripción                               |
 |----------------|-------------|-------------------------------------------|
@@ -145,6 +146,47 @@ proyecto-fase1/
 | `--color-acento`      | `#c0392b` | Versión más oscura del rojo para el tema claro, garantizando contraste suficiente sobre fondos blancos.                         |
 | `--color-exito`       | `#27ae60` | Verde ligeramente más oscuro que en tema oscuro para mantener contraste adecuado sobre fondo claro.                             |
 
----
 
 *UVG · STW 2026 · Fase 2 de 4*
+
+---
+
+## Mi gráfica original
+
+La tercera gráfica (un LineChart) muestra el **volumen total levantado (kg) por sesión**.
+
+Decidí usarla porque el volumen total es la métrica más importante para medir el progreso en el gimnasio. Ver la línea en cada entrenamiento me permite saber fácilmente si estoy subiendo mis pesos, si me estanqué, o qué sesiones fueron las más pesadas.
+
+---
+
+## Mis 3 decisiones técnicas
+
+**1. Filtros y lista en un mismo Reducer**
+
+Preferí meter los filtros (búsqueda, categoría, estado) en el mismo reducer de la lista en lugar de usar varios `useState`. Así, con una sola acción (`LIMPIAR_FILTROS`) puedo limpiar todo de un solo sin provocar varios re-renders innecesarios en la aplicación.
+
+**2. Mantener puro el Reducer (REGISTRAR_ACTIVIDAD)**
+
+Esta acción fue la que más me costó porque un reducer no debe tener efectos secundarios (como calcular fechas o conectarse a un API). Para solucionarlo, mejor genero la fecha actual en `App.jsx` y se la paso ya calculada en el payload. Así el reducer solo se encarga de actualizar el dato.
+
+**3. Datos de la gráfica de Volumen**
+
+Preparar esta gráfica fue complejo porque el dato del volumen viene adentro de un JSON anidado. Tuve que hacer un `.filter()` para quitar las sesiones de cardio (que no usan peso), un `.sort()` para ordenarlo todo por fecha y un `.map()` para que la gráfica de Recharts lo pudiera leer bien.
+
+---
+
+## Evidencia Profiler
+
+### Antes de optimizar (sin useMemo / React.memo)
+![Profiler ANTES](./captura-profiler-antes.png)
+
+### Después de optimizar (con useMemo / React.memo)
+![Profiler DESPUÉS](./captura-profiler-despues.png)
+
+**Análisis: ¿Qué componentes dejaron de re-renderizarse?**
+
+Al escribir en el buscador:
+- **Antes:** Cada letra que tecleaba forzaba a que toda la aplicación se volviera a renderizar. Esto hacía que el componente de **`Graficas`** (que es pesado) y todas las **`ItemCard`** se actualizaran por gusto en cada teclazo, aunque sus datos no hubieran cambiado.
+- **Después:** Gracias a que implementé `useMemo`, `useCallback` y envolví las tarjetas con `React.memo`, el Profiler muestra que ahora esos componentes se omiten (salen en gris). Es decir, **`Graficas`** y las **`ItemCard`** que no cambian dejaron de re-renderizarse por completo, haciendo que la aplicación se sienta mucho más rápida.
+
+*UVG · STW 2026 · Fase 3 de 4*
