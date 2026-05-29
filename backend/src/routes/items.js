@@ -1,4 +1,3 @@
-// backend/src/routes/items.js
 const express = require('express')
 const { randomUUID } = require('crypto')
 const db = require('../db/database')
@@ -9,12 +8,11 @@ function parsearItem(row) {
   if (!row) return null
   return {
     ...row,
-    activo:    Boolean(row.activo),
+    activo: Boolean(row.activo),
     atributos: JSON.parse(row.atributos || '{}'),
   }
 }
 
-// ─── GET /api/items ──────────────────────────────────────────────────────────
 router.get('/', (req, res) => {
   try {
     const rows = db
@@ -26,7 +24,6 @@ router.get('/', (req, res) => {
   }
 })
 
-// ─── POST /api/items ─────────────────────────────────────────────────────────
 router.post('/', (req, res) => {
   const { nombre, categoriaId, estado = 'activo', puntuacion = null, notas = '', atributos = {} } = req.body
 
@@ -40,16 +37,16 @@ router.post('/', (req, res) => {
   try {
     const ahora = new Date().toISOString()
     const nuevo = {
-      id:             randomUUID(),
-      nombre:         nombre.trim(),
+      id: randomUUID(),
+      nombre: nombre.trim(),
       categoriaId,
       estado,
       puntuacion,
-      fechaRegistro:  req.body.fechaRegistro  || ahora,
+      fechaRegistro: req.body.fechaRegistro || ahora,
       fechaActividad: req.body.fechaActividad || ahora,
-      notas:          notas.trim(),
-      atributos:      JSON.stringify(atributos),
-      activo:         1,
+      notas: notas.trim(),
+      atributos: JSON.stringify(atributos),
+      activo: 1,
     }
     db.prepare(`
       INSERT INTO items
@@ -65,7 +62,6 @@ router.post('/', (req, res) => {
   }
 })
 
-// ─── PUT /api/items/:id ──────────────────────────────────────────────────────
 router.put('/:id', (req, res) => {
   const { id } = req.params
   const existe = db.prepare('SELECT id FROM items WHERE id = ?').get(id)
@@ -74,15 +70,15 @@ router.put('/:id', (req, res) => {
   const { nombre, categoriaId, estado, puntuacion, notas, atributos } = req.body
 
   try {
-    const campos  = []
+    const campos = []
     const valores = {}
 
-    if (nombre      !== undefined) { campos.push('nombre = @nombre');           valores.nombre      = nombre.trim() }
+    if (nombre !== undefined) { campos.push('nombre = @nombre'); valores.nombre = nombre.trim() }
     if (categoriaId !== undefined) { campos.push('categoriaId = @categoriaId'); valores.categoriaId = categoriaId }
-    if (estado      !== undefined) { campos.push('estado = @estado');           valores.estado      = estado }
-    if (puntuacion  !== undefined) { campos.push('puntuacion = @puntuacion');   valores.puntuacion  = puntuacion }
-    if (notas       !== undefined) { campos.push('notas = @notas');             valores.notas       = notas }
-    if (atributos   !== undefined) { campos.push('atributos = @atributos');     valores.atributos   = JSON.stringify(atributos) }
+    if (estado !== undefined) { campos.push('estado = @estado'); valores.estado = estado }
+    if (puntuacion !== undefined) { campos.push('puntuacion = @puntuacion'); valores.puntuacion = puntuacion }
+    if (notas !== undefined) { campos.push('notas = @notas'); valores.notas = notas }
+    if (atributos !== undefined) { campos.push('atributos = @atributos'); valores.atributos = JSON.stringify(atributos) }
 
     campos.push('fechaActividad = @fechaActividad')
     valores.fechaActividad = new Date().toISOString()
@@ -96,7 +92,6 @@ router.put('/:id', (req, res) => {
   }
 })
 
-// ─── DELETE /api/items/:id ───────────────────────────────────────────────────
 router.delete('/:id', (req, res) => {
   try {
     const info = db.prepare('UPDATE items SET activo = 0 WHERE id = ?').run(req.params.id)
@@ -107,7 +102,6 @@ router.delete('/:id', (req, res) => {
   }
 })
 
-// ─── POST /api/items/:id/registro ────────────────────────────────────────────
 router.post('/:id/registro', (req, res) => {
   const { id } = req.params
   const { valor, notas = '', fecha } = req.body
@@ -121,11 +115,11 @@ router.post('/:id/registro', (req, res) => {
 
   try {
     const registro = {
-      id:     randomUUID(),
+      id: randomUUID(),
       itemId: id,
-      fecha:  fecha || new Date().toISOString().split('T')[0],
-      valor:  Number(valor),
-      notas:  notas.trim(),
+      fecha: fecha || new Date().toISOString().split('T')[0],
+      valor: Number(valor),
+      notas: notas.trim(),
     }
     db.prepare(`
       INSERT INTO registros (id, itemId, fecha, valor, notas)

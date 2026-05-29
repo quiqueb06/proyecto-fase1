@@ -1,10 +1,6 @@
-// backend/src/db/database.js
-// Usa el módulo nativo de Node.js 22+ (no requiere compilación)
 const { DatabaseSync } = require('node:sqlite')
 const path = require('path')
-
 const db = new DatabaseSync(path.join(__dirname, '../../database.sqlite'))
-
 db.exec(`
   CREATE TABLE IF NOT EXISTS items (
     id             TEXT PRIMARY KEY,
@@ -15,10 +11,9 @@ db.exec(`
     fechaRegistro  TEXT NOT NULL,
     fechaActividad TEXT,
     notas          TEXT DEFAULT '',
-    atributos      TEXT DEFAULT '{}',
+    atributos      TEXT DEFAULT '',
     activo         INTEGER DEFAULT 1
   );
-
   CREATE TABLE IF NOT EXISTS registros (
     id      TEXT PRIMARY KEY,
     itemId  TEXT NOT NULL,
@@ -28,5 +23,4 @@ db.exec(`
     FOREIGN KEY (itemId) REFERENCES items(id)
   );
 `)
-
 module.exports = db
