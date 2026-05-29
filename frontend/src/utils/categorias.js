@@ -5,13 +5,11 @@ export const CATEGORIAS = [
   { id: 'deportes',     nombre: 'Deportes',      emoji: '⚽', color: '#f39c12' },
   { id: 'hiit',         nombre: 'HIIT',          emoji: '🔥', color: '#9b59b6' },
 ]
-
 export const ESTADOS = [
   { id: 'activo',     nombre: 'Activo' },
   { id: 'completado', nombre: 'Completado' },
   { id: 'pausa',      nombre: 'En pausa' },
 ]
-
 export function getCategoriaById(id) {
   return CATEGORIAS.find(c => c.id === id) || { emoji: '', nombre: id, color: '#888' }
 }

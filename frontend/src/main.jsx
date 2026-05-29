@@ -5,7 +5,6 @@ import App from './App.jsx'
 import { StorageProvider } from './context/StorageProvider.jsx'
 import { ThemeProvider }   from './context/ThemeProvider.jsx'
 import { UserProvider }    from './context/UserProvider.jsx'
-
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ThemeProvider>

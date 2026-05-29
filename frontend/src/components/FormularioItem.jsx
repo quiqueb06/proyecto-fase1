@@ -1,7 +1,5 @@
-// src/components/FormularioItem.jsx
 import { useState } from 'react'
 import { CATEGORIAS, ESTADOS } from '../utils/categorias'
-
 const FORM_INICIAL = {
   nombre:          '',
   categoriaId:     'fuerza',
@@ -12,17 +10,14 @@ const FORM_INICIAL = {
   ejercicios:      '',
   volumenTotal:    '',
 }
-
 export default function FormularioItem({ onAgregar, inputRef }) {
   const [form, setForm] = useState(FORM_INICIAL)
   const [error, setError] = useState('')
-
   function handleChange(e) {
     const { name, value } = e.target
     setForm(prev => ({ ...prev, [name]: value }))
     if (error) setError('')
   }
-
   function handleSubmit(e) {
     e.preventDefault()
     if (!form.nombre.trim() || form.nombre.trim().length < 3) {
@@ -47,19 +42,14 @@ export default function FormularioItem({ onAgregar, inputRef }) {
     onAgregar(nuevo)
     setForm(FORM_INICIAL)
   }
-
   return (
     <div className="formulario-card">
       <h2>Registrar sesion</h2>
-
       {error && <p className="error-msg">{error}</p>}
-
       <form onSubmit={handleSubmit}>
         <div className="form-grid">
-
           <div className="form-group full-width">
             <label htmlFor="nombre">Nombre de la sesion *</label>
-            {/* inputRef apunta a este input — useRef uso 1 */}
             <input
               id="nombre"
               name="nombre"
@@ -71,7 +61,6 @@ export default function FormularioItem({ onAgregar, inputRef }) {
               required
             />
           </div>
-
           <div className="form-group">
             <label htmlFor="categoriaId">Tipo de entrenamiento</label>
             <select id="categoriaId" name="categoriaId" value={form.categoriaId} onChange={handleChange}>
@@ -80,7 +69,6 @@ export default function FormularioItem({ onAgregar, inputRef }) {
               ))}
             </select>
           </div>
-
           <div className="form-group">
             <label htmlFor="estado">Estado</label>
             <select id="estado" name="estado" value={form.estado} onChange={handleChange}>
@@ -89,7 +77,6 @@ export default function FormularioItem({ onAgregar, inputRef }) {
               ))}
             </select>
           </div>
-
           <div className="form-group">
             <label htmlFor="duracionMinutos">Duracion (minutos)</label>
             <input
@@ -103,7 +90,6 @@ export default function FormularioItem({ onAgregar, inputRef }) {
               onChange={handleChange}
             />
           </div>
-
           <div className="form-group">
             <label htmlFor="puntuacion">Intensidad (0-10)</label>
             <input
@@ -118,7 +104,6 @@ export default function FormularioItem({ onAgregar, inputRef }) {
               onChange={handleChange}
             />
           </div>
-
           <div className="form-group full-width">
             <label htmlFor="ejercicios">Ejercicios (separados por coma)</label>
             <input
@@ -130,7 +115,6 @@ export default function FormularioItem({ onAgregar, inputRef }) {
               onChange={handleChange}
             />
           </div>
-
           <div className="form-group">
             <label htmlFor="volumenTotal">Volumen total (kg)</label>
             <input
@@ -144,7 +128,6 @@ export default function FormularioItem({ onAgregar, inputRef }) {
               onChange={handleChange}
             />
           </div>
-
           <div className="form-group">
             <label htmlFor="notas">Notas</label>
             <textarea
@@ -155,7 +138,6 @@ export default function FormularioItem({ onAgregar, inputRef }) {
               onChange={handleChange}
             />
           </div>
-
           <button type="submit" className="btn-submit">
             Guardar sesion
           </button>

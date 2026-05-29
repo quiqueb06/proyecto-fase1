@@ -1,14 +1,11 @@
-// src/components/ItemCard.jsx
-import { useState } from 'react'
-import { getCategoriaById, getEstadoById, ESTADOS } from '../utils/categorias'
-
+import { useState, memo } from 'react'
+import { getCategoriaById, ESTADOS } from '../utils/categorias'
 function claseEstado(estado) {
   if (estado === 'activo')     return 'estado-activo'
   if (estado === 'completado') return 'estado-completado'
   return 'estado-pausa'
 }
-
-export default function ItemCard({ item, onArchivar, onEditar, onCambiarEstado }) {
+function ItemCard({ item, onArchivar, onEditar, onCambiarEstado }) {
   const [editando, setEditando] = useState(false)
   const [form, setForm] = useState({
     nombre:          item.nombre,
@@ -19,21 +16,17 @@ export default function ItemCard({ item, onArchivar, onEditar, onCambiarEstado }
     volumenTotal:    item.atributos?.volumenTotal ?? '',
     puntuacion:      item.puntuacion ?? '',
   })
-
   const cat = getCategoriaById(item.categoriaId)
-  const estadoInfo = getEstadoById(item.estado)
   const fecha = new Date(item.fechaRegistro).toLocaleDateString('es', {
     day: '2-digit', month: 'short', year: 'numeric'
   })
   const ejerciciosArr = item.atributos?.ejercicios
     ? item.atributos.ejercicios.split(',').map(e => e.trim()).filter(Boolean)
     : []
-
   function handleChange(e) {
     const { name, value } = e.target
     setForm(prev => ({ ...prev, [name]: value }))
   }
-
   function handleGuardar() {
     onEditar({
       ...item,
@@ -50,7 +43,6 @@ export default function ItemCard({ item, onArchivar, onEditar, onCambiarEstado }
     })
     setEditando(false)
   }
-
   if (editando) {
     return (
       <div className="item-card">
@@ -67,11 +59,11 @@ export default function ItemCard({ item, onArchivar, onEditar, onCambiarEstado }
           </select>
         </div>
         <div className="form-group">
-          <label>Duración (min)</label>
+          <label>Duracion (min)</label>
           <input name="duracionMinutos" type="number" min="1" value={form.duracionMinutos} onChange={handleChange} />
         </div>
         <div className="form-group">
-          <label>Intensidad (0–10)</label>
+          <label>Intensidad (0-10)</label>
           <input name="puntuacion" type="number" min="0" max="10" step="0.5" value={form.puntuacion} onChange={handleChange} />
         </div>
         <div className="form-group">
@@ -93,7 +85,6 @@ export default function ItemCard({ item, onArchivar, onEditar, onCambiarEstado }
       </div>
     )
   }
-
   return (
     <div className="item-card">
       <div className="item-card-header">
@@ -105,13 +96,13 @@ export default function ItemCard({ item, onArchivar, onEditar, onCambiarEstado }
           {cat.nombre}
         </span>
       </div>
-
       <div>
         <span className={`badge-estado ${claseEstado(item.estado)}`}>
-          {estadoInfo.nombre}
+          {item.estado === 'activo' ? 'Activo'
+            : item.estado === 'completado' ? 'Completado'
+            : 'En pausa'}
         </span>
       </div>
-
       <div className="item-card-meta">
         {item.atributos?.duracionMinutos && (
           <span className="meta-item">{item.atributos.duracionMinutos} min</span>
@@ -124,7 +115,6 @@ export default function ItemCard({ item, onArchivar, onEditar, onCambiarEstado }
         )}
         <span className="meta-item">{fecha}</span>
       </div>
-
       {ejerciciosArr.length > 0 && (
         <div className="item-card-atributos">
           {ejerciciosArr.map((ej, i) => (
@@ -132,11 +122,9 @@ export default function ItemCard({ item, onArchivar, onEditar, onCambiarEstado }
           ))}
         </div>
       )}
-
       {item.notas && (
         <p className="item-card-notas">"{item.notas}"</p>
       )}
-
       <div className="item-card-acciones">
         <button
           className="btn-accion success"
@@ -154,3 +142,4 @@ export default function ItemCard({ item, onArchivar, onEditar, onCambiarEstado }
     </div>
   )
 }
+export default memo(ItemCard)
