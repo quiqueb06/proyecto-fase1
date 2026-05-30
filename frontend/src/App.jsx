@@ -1,12 +1,14 @@
 // src/App.jsx
 import { useReducer, useMemo, useCallback, useEffect, useRef } from 'react'
 import { itemsReducer, estadoInicial } from './reducers/itemsReducer'
-import { useStorage } from './context/StorageProvider'
-import { useTheme } from './context/ThemeProvider'
-import { useUser } from './context/UserProvider'
+import { useStorage }      from './context/StorageProvider'
+import { useTheme }        from './context/ThemeProvider'
+import { useUser }         from './context/UserProvider'
+import { useAtajoTeclado } from './hooks/useAtajoTeclado'
+import { useRacha }        from './hooks/useRacha'
 import FormularioItem from './components/FormularioItem'
-import ListaItems from './components/ListaItems'
-import Graficas from './components/Graficas'
+import ListaItems     from './components/ListaItems'
+import Graficas       from './components/Graficas'
 import { CATEGORIAS, ESTADOS } from './utils/categorias'
 
 export default function App() {
@@ -21,6 +23,9 @@ export default function App() {
   // useRef 2: ID del setInterval sin provocar re-render
   const intervalRef = useRef(null)
 
+  // Hook de dominio: racha de entrenamiento
+  const { rachaActual, rachaMasLarga } = useRacha(estado.lista)
+
   // Carga inicial
   useEffect(() => {
     obtenerItems().then(data => {
@@ -28,7 +33,7 @@ export default function App() {
     })
   }, [obtenerItems])
 
-  // Refresco periodico sin re-render del intervalo
+  // Refresco periodico
   useEffect(() => {
     intervalRef.current = setInterval(() => {
       obtenerItems().then(data => {
@@ -38,20 +43,13 @@ export default function App() {
     return () => clearInterval(intervalRef.current)
   }, [obtenerItems])
 
-  // Atajos de teclado con cleanup
-  useEffect(() => {
-    const handler = (e) => {
-      if (e.ctrlKey && e.key === 'b') {
-        e.preventDefault()
-        inputRef.current?.focus()
-      }
-      if ((e.key === 't' || e.key === 'T') && !['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) {
-        toggleTema()
-      }
-    }
-    window.addEventListener('keydown', handler)
-    return () => window.removeEventListener('keydown', handler)
-  }, [toggleTema])
+  // Atajos de teclado usando useAtajoTeclado
+  const handleFocusInput = useCallback(() => {
+    inputRef.current?.focus()
+  }, [])
+
+  useAtajoTeclado('b', handleFocusInput, { ctrl: true })
+  useAtajoTeclado('t', toggleTema)
 
   // useMemo: lista filtrada
   const itemsVisibles = useMemo(() => {
@@ -65,15 +63,12 @@ export default function App() {
     return res
   }, [estado.lista, estado.busqueda, estado.filtroCategoria, estado.filtroEstado])
 
-  // useMemo: datos para graficas (reaccionan a filtros)
   const itemsParaGraficas = useMemo(() => itemsVisibles, [itemsVisibles])
 
-  // useCallback: handlers para componentes hijos
+  // useCallback: handlers
   const handleAgregar = useCallback(async (nuevoItem) => {
-    const itemGuardado = await guardarItem(nuevoItem)
-    if (itemGuardado) {
-      dispatch({ type: 'AGREGAR', payload: itemGuardado })
-    }
+    dispatch({ type: 'AGREGAR', payload: nuevoItem })
+    await guardarItem(nuevoItem)
     inputRef.current?.focus()
   }, [guardarItem])
 
@@ -83,13 +78,11 @@ export default function App() {
   }, [eliminarItem])
 
   const handleEditar = useCallback(async (itemActualizado) => {
-    dispatch({
-      type: 'CAMBIAR_ESTADO', payload: {
-        id: itemActualizado.id,
-        estado: itemActualizado.estado,
-        fechaActividad: itemActualizado.fechaActividad,
-      }
-    })
+    dispatch({ type: 'CAMBIAR_ESTADO', payload: {
+      id: itemActualizado.id,
+      estado: itemActualizado.estado,
+      fechaActividad: itemActualizado.fechaActividad,
+    }})
     await guardarItem(itemActualizado)
     obtenerItems().then(data => dispatch({ type: 'HIDRATAR', payload: data }))
   }, [guardarItem, obtenerItems])
@@ -114,6 +107,9 @@ export default function App() {
       <header className="app-header">
         <h1>Mi Entrenamiento</h1>
         <p>{nombre ? `Hola, ${nombre}` : 'Bitacora personal de sesiones de gym'}</p>
+        <p style={{ fontSize: '0.85rem', color: 'var(--color-texto-suave)', marginTop: 4 }}>
+          Racha actual: {rachaActual} dias · Racha mas larga: {rachaMasLarga} dias
+        </p>
         <div className="controles-bar">
           <button
             className={`btn-control ${modo === 'local' ? 'activo' : ''}`}
@@ -133,7 +129,7 @@ export default function App() {
         </div>
       </header>
 
-      {error && <p className="error-msg">Error: {error}</p>}
+      {error    && <p className="error-msg">Error: {error}</p>}
       {cargando && <p style={{ textAlign: 'center', color: 'var(--color-texto-suave)', marginBottom: 12 }}>Cargando...</p>}
 
       <FormularioItem onAgregar={handleAgregar} inputRef={inputRef} />
