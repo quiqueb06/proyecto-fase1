@@ -205,6 +205,12 @@ Al escribir en el buscador:
 
 ---
 
+## Screenshots
+
+![Modo oscuro](/oscuro.png)
+![Modo claro](/claro.png)
+![Graficas](/graficas.png)
+
 ## Sobre mi
 
 **Nombre:** Enrique Bran
