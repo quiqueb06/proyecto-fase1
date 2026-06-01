@@ -24,6 +24,17 @@ router.get('/', (req, res) => {
   }
 })
 
+router.get('/:id', (req, res) => {
+  try {
+    const { id } = req.params
+    const row = db.prepare('SELECT * FROM items WHERE id = ?').get(id)
+    if (!row) return res.status(404).json({ error: 'Item no encontrado' })
+    res.json(parsearItem(row))
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+})
+
 router.post('/', (req, res) => {
   const { nombre, categoriaId, estado = 'activo', puntuacion = null, notas = '', atributos = {} } = req.body
 
