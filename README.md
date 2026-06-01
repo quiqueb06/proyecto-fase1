@@ -4,7 +4,10 @@
 **Fase 1:** useState · useEffect · Backend Express
 **Fase 2:** useContext · useRef · Tema Visual
 **Fase 3:** useReducer · React.memo · Recharts
+**Fase 4:** Custom Hooks · Deploy · Video
 
+**Demo:** https://proyecto-fase1.vercel.app
+**API:** https://proyecto-fase1.onrender.com
 ---
 
 ## Descripción
@@ -190,3 +193,26 @@ Al escribir en el buscador:
 - **Después:** Gracias a que implementé `useMemo`, `useCallback` y envolví las tarjetas con `React.memo`, el Profiler muestra que ahora esos componentes se omiten (salen en gris). Es decir, **`Graficas`** y las **`ItemCard`** que no cambian dejaron de re-renderizarse por completo, haciendo que la aplicación se sienta mucho más rápida.
 
 *UVG · STW 2026 · Fase 3 de 4*
+
+## Hooks implementados
+
+| Hook               | Archivo                       | Que hace                                                        |
+|--------------------|-------------------------------|-----------------------------------------------------------------|
+| useLocalStorage    | src/hooks/useLocalStorage.js  | Sincroniza estado con localStorage usando useState + useEffect  |
+| useFetch           | src/hooks/useFetch.js         | Fetch con estados data/cargando/error y AbortController         |
+| useAtajoTeclado    | src/hooks/useAtajoTeclado.js  | Registra atajos de teclado con cleanup automatico               |
+| useRacha           | src/hooks/useRacha.js         | Calcula racha actual y racha mas larga de dias entrenados        |
+
+---
+
+## Sobre mi
+
+**Nombre:** Enrique Bran
+**Carne:** 25302
+**Semestre:** actual
+
+Hacer este proyecto me sirvió bastante para aprender a estructurar una aplicación en React de forma escalable, separando bien las responsabilidades entre los contextos, el reducer y los custom hooks. Antes usaba `useState` para todo y no me explicaba por qué los componentes se volvían a renderizar por gusto. Aprender a implementar `useReducer`, `useMemo` y `useCallback` me dio las herramientas precisas para cuidar el rendimiento, y los custom hooks me enseñaron cómo reutilizar la lógica sin tener que andar duplicando código entre los componentes.
+
+---
+
+*UVG - STW 2026 - Fase 4 de 4*
